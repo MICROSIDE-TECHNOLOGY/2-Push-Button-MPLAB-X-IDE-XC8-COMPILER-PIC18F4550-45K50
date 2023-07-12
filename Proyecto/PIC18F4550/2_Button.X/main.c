@@ -76,23 +76,22 @@
 #include <xc.h>
 #include <pic18f4550.h>
 
-void InitPorts(void);
+#define LED LATAbits.LATA4  //Definición que asigna el estado del pin del LED
+                            //Tome en cuenta que en versiones anteriores se hacia uso del pin A1
+#define Boton PORTAbits.RA2 //Definición que devuelve el estado del botón
 
 void main(void) {
-    InitPorts();
+    
+    ADCON1bits.PCFG = 0xF;      //Se configura el pin como salida digital 
+    TRISAbits.RA4 = 0;          //Se asigna el pin A4 como salida
+    TRISAbits.RA2 = 1;          //Se asigna el pin A2 como entrada
+    
     while(1){
-        if(PORTAbits.RA2==0){
-            LATAbits.LATA4 = 1;
+        if(Boton==0){
+            LED = 1;
         }else{
-            LATAbits.LATA4 = 0;
+            LED = 0;
         }        
     }
     return;
-}
-
-void InitPorts(void) {
-    ADCON1bits.PCFG = 0xF;
-    LATA = 0;
-    TRISAbits.RA4 = 0;
-    TRISAbits.RA2 = 1;
 }
